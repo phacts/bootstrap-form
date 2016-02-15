@@ -550,7 +550,9 @@ class BootstrapForm
         $inputElement = $type === 'password' ? $this->form->password($name, $options) : $this->form->{$type}($name, $value, $options);
         
         $wrapperOptions = $this->isHorizontal() ? ['class' => $this->getRightColumnClass()] : [];
-        $wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement . $this->getFieldError($name) . '</div>';
+        $wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement . $this->getFieldError($name) 
+        . $this->getFieldHelp($options)
+        . '</div>';
 
         return $this->getFormGroupWithLabel($name, $label, $wrapperElement);
     }
@@ -847,6 +849,23 @@ class BootstrapForm
 
             return $this->getErrors()->first($field, $format);
         }
+    }
+
+    /**
+     * Get help text for a field, if there is any.
+     *
+     * @param  string  $field
+     * @param  string  $format
+     * @return mixed
+     */
+    protected function getFieldHelp($options, $format = '<span class="help-block">%s</span>')
+    {
+        $ret = '';
+        if ($help = array_get($options, 'help', '')) {
+            $ret = sprintf($format, $help);
+        }
+        return $ret;
+
     }
 
     /**
